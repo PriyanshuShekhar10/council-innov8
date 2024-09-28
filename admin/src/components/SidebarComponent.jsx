@@ -5,7 +5,6 @@ import {
   FaTh,
   FaThinkPeaks,
   FaTv,
-  FaUsers,
 } from "react-icons/fa";
 import { MdMovieEdit } from "react-icons/md";
 import { NavLink } from "react-router-dom";
@@ -20,20 +19,17 @@ export default function SidebarComponent({ children }) {
     { path: "/movies", name: "Shortlisted", icon: <MdMovieEdit /> },
     { path: "/advertisement", name: "Fraudelent", icon: <FaThinkPeaks /> },
     { path: "/cinema", name: "Network Analysis", icon: <FaTv /> },
-    
-    
-    // { path: "/users", name: "Users", icon: <FaUsers /> },
   ];
 
   return (
     <div className="container">
-      <div style={{ width: isOpen ? "300px" : "50px" }} className="sidebar">
+      <div className={`sidebar ${isOpen ? "expanded" : "collapsed"}`}>
         <div className="top_section">
-          <h1 style={{ display: isOpen ? "block" : "none" }} className="logo">
+          <h1 className="logo" style={{ display: isOpen ? "block" : "none" }}>
             Satya
           </h1>
-          <div style={{ marginLeft: isOpen ? "30px" : 0 }} className="bars">
-            <FaBars onClick={toggle} />
+          <div className="bars" onClick={toggle} style={{ marginLeft: isOpen ? "30px" : 0 }}>
+            <FaBars />
           </div>
         </div>
 
@@ -47,12 +43,14 @@ export default function SidebarComponent({ children }) {
             <div className="items" style={{ fontSize: "20px" }}>
               {item.icon}
             </div>
-            <div className="link_text">{item.name}</div>
+            <div className="link_text" style={{ display: isOpen ? "inline-block" : "none" }}>
+              {item.name}
+            </div>
           </NavLink>
         ))}
       </div>
 
-      <main>{children}</main>
+      <main className={isOpen ? "main expanded" : "main"}>{children}</main>
     </div>
   );
 }
