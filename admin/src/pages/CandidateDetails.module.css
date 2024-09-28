@@ -1,0 +1,192 @@
+/* Container */
+.container {
+    display: flex;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(162, 141, 141, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.container:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Left Panel */
+.leftPanel {
+    flex-basis: 25%;
+    padding: 20px;
+    background-color: #ffffff;
+    border-right: 2px solid #666;
+    /* Darkened middle line */
+    border-radius: 8px 0 0 8px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.leftPanel:hover {
+    background-color: #f0f4f8;
+}
+
+.avatar {
+    width: 100%;
+    max-width: 150px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    border: 4px solid #007bff;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.avatar:hover {
+    transform: scale(1.1);
+    border-color: #0056b3;
+}
+
+.details h2 {
+    margin-bottom: 10px;
+    color: #2c3e50;
+    /* Darker text color for heading */
+    font-size: 1.5rem;
+    transition: color 0.3s ease;
+}
+
+.details h2:hover {
+    color: #007bff;
+}
+
+.details p {
+    margin: 5px 0;
+    color: #444;
+    /* Darker text color for paragraphs */
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.details p:hover {
+    color: #007bff;
+}
+
+.skills {
+    margin-top: 20px;
+}
+
+.skills h3 {
+    margin-bottom: 10px;
+    color: #007bff;
+    font-size: 1.3rem;
+    transition: color 0.3s ease;
+}
+
+.skills h3:hover {
+    color: #0056b3;
+}
+
+.skills ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.skills li {
+    background-color: #eef;
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    color: #333;
+    /* Darker text color for skills */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.skills li:hover {
+    background-color: #cce;
+    transform: translateX(5px);
+}
+
+/* Right Panel */
+.rightPanel {
+    flex-basis: 75%;
+    padding: 20px;
+    background-color: #c0ffde;
+    border-radius: 0 8px 8px 0;
+    transition: background-color 0.3s ease;
+}
+
+.rightPanel:hover {
+    background-color: #f0f4f8;
+}
+
+.sectionTitle {
+    margin-bottom: 20px;
+    color: #007bff;
+    font-size: 1.75rem;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+}
+
+.sectionTitle:hover {
+    color: #0056b3;
+    border-color: #0056b3;
+}
+
+/* Timeline Styling */
+.vertical-timeline-element-content {
+    border-radius: 8px !important;
+    background-color: #2196f3 !important;
+    /* Ensure background color is blue */
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    color: #ffffff !important;
+    /* Make all text in timeline cards white */
+}
+
+.vertical-timeline-element-content:hover {
+    transform: scale(1.05);
+    background-color: #1976d2 !important;
+    /* Slightly darker blue on hover */
+}
+
+.vertical-timeline-element-title,
+.vertical-timeline-element-subtitle,
+.vertical-timeline-element-content p {
+    color: #ffffff !important;
+    /* Ensure all text in timeline cards is white */
+    transition: color 0.3s ease;
+}
+
+/* Timeline Line */
+.vertical-timeline::before {
+    background-color: #000;
+    /* Black middle line in the timeline */
+}
+
+.vertical-timeline-element-icon {
+    background-color: #ffffff;
+    color: #2196f3;
+}
+
+.vertical-timeline-element-icon:hover {
+    background-color: #1976d2;
+    color: #ffffff;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .leftPanel {
+        flex-basis: 100%;
+        border-radius: 8px 8px 0 0;
+        margin-bottom: 20px;
+        border-right: none;
+        /* Remove border on smaller screens */
+    }
+
+    .rightPanel {
+        flex-basis: 100%;
+        border-radius: 0 0 8px 8px;
+    }
+}

@@ -5,21 +5,13 @@ const cors = require("cors");
 const app = express();
 app.use(express.json());
 
-// Enable CORS for all origins
+// Enable CORS for your frontend URL
 app.use(
   cors({
-    origin: "http://localhost:5174", // Change this to your frontend's URL
+    origin: "http://localhost:5174", // Ensure this matches your frontend's URL
     credentials: true,
   })
 );
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*"); // Adjust as necessary
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
 
 // Connect to MongoDB
 mongoose
