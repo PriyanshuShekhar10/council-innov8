@@ -5,6 +5,7 @@ import "./Dashboard.css"; // Import CSS for styling
 import Iframe from "../components/Iframe";
 import { Pie } from "react-chartjs-2";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
+import CandidatesTable from "../components/CandidatesTable"; // Import the table component
 
 // Register the required components for Chart.js
 Chart.register(ArcElement, Tooltip, Legend);
@@ -108,6 +109,8 @@ export default function Dashboard({ adminName = "Admin" }) {
             <Pie data={pieData3} />
           </div>
         </div>
+        {/* Candidates Table Section */}
+        <CandidatesTable />
         <Iframe />
       </div>
     </>

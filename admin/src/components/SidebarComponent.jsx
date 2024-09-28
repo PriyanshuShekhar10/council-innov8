@@ -2,9 +2,13 @@ import { useState } from "react";
 import {
   FaBars,
   FaBook,
+  FaExclamationTriangle,
+  FaGlobe,
+  FaSearchengin,
   FaTh,
   FaThinkPeaks,
   FaTv,
+  FaUser,
 } from "react-icons/fa";
 import { MdMovieEdit } from "react-icons/md";
 import { NavLink } from "react-router-dom";
@@ -15,10 +19,10 @@ export default function SidebarComponent({ children }) {
 
   const menuItem = [
     { path: "/", name: "Dashboard", icon: <FaTh /> },
-    { path: "/reservations", name: "Candidates", icon: <FaBook /> },
-    { path: "/movies", name: "Shortlisted", icon: <MdMovieEdit /> },
-    { path: "/advertisement", name: "Fraudelent", icon: <FaThinkPeaks /> },
-    { path: "/cinema", name: "Network Analysis", icon: <FaTv /> },
+    { path: "/reservations", name: "Candidates", icon: <FaUser /> },
+    { path: "/movies", name: "Shortlisted", icon: < FaSearchengin/> },
+    { path: "/advertisement", name: "Fraudelent", icon: <FaExclamationTriangle /> },
+    { path: "/cinema", name: "Network Analysis", icon: <FaGlobe /> },
   ];
 
   return (
@@ -28,7 +32,11 @@ export default function SidebarComponent({ children }) {
           <h1 className="logo" style={{ display: isOpen ? "block" : "none" }}>
             Satya
           </h1>
-          <div className="bars" onClick={toggle} style={{ marginLeft: isOpen ? "30px" : 0 }}>
+          <div
+            className="bars"
+            onClick={toggle}
+            style={{ marginLeft: isOpen ? "30px" : 0 }}
+          >
             <FaBars />
           </div>
         </div>
@@ -43,7 +51,10 @@ export default function SidebarComponent({ children }) {
             <div className="items" style={{ fontSize: "20px" }}>
               {item.icon}
             </div>
-            <div className="link_text" style={{ display: isOpen ? "inline-block" : "none" }}>
+            <div
+              className="link_text"
+              style={{ display: isOpen ? "inline-block" : "none" }}
+            >
               {item.name}
             </div>
           </NavLink>
