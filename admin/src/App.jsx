@@ -6,31 +6,34 @@ import Reservations from "./pages/Reservations";
 import Users from "./pages/Users";
 import Movies from "./pages/Movies";
 import SidebarComponent from "./components/SidebarComponent";
-import "./App.css";
 import Login from "./pages/Login/Login";
+import "./App.css";
 
 const App = () => {
   return (
-    <>
-      <BrowserRouter>
-        <SidebarComponent>
-          <Routes>
-            <Route path="/advertisement" element={<Advertisement />} />
-            <Route path="/cinema" element={<Cinema />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/movies" element={<Movies />} />
-            <Route path="/reservations" element={<Reservations />} />
-            {/* <Route path="/users" element={<Users />} /> */}
-            <Route path="/candidate" element={<Users />} />
-          </Routes>
-        </SidebarComponent>
-        <Routes>
-          {/* Login Route without Sidebar */}
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <Routes>
+        {/* Login Route without Sidebar */}
+        <Route path="/login" element={<Login />} />
+        {/* All other routes with Sidebar */}
+        <Route
+          path="*"
+          element={
+            <SidebarComponent>
+              <Routes>
+                <Route path="/advertisement" element={<Advertisement />} />
+                <Route path="/cinema" element={<Cinema />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/movies" element={<Movies />} />
+                <Route path="/reservations" element={<Reservations />} />
+                <Route path="/candidates/:id" element={<Users />} />
+              </Routes>
+            </SidebarComponent>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 };
 

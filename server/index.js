@@ -1,8 +1,25 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const app = express();
 app.use(express.json());
+
+// Enable CORS for all origins
+app.use(
+  cors({
+    origin: "http://localhost:5174", // Change this to your frontend's URL
+    credentials: true,
+  })
+);
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*"); // Adjust as necessary
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 
 // Connect to MongoDB
 mongoose
@@ -80,9 +97,9 @@ app.put("/api/candidates/:id", async (req, res) => {
 
 // Delete Candidate by ID
 app.delete("/api/candidates/:id", async (req, res) => {
-  const result = await Candidate.findOneAndDelete({ id: req.params.id });
-  if (!result) return res.status(404).send("Candidate not found");
-  res.send(result);
+  const candidate = await Candidate.findOneAndDelete({ id: req.params.id });
+  if (!candidate) return res.status(404).send("Candidate not found");
+  res.send(candidate);
 });
 
 // Shortlisted Candidates CRUD Operations
