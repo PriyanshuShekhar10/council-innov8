@@ -13,7 +13,7 @@
     flex-grow: 1;
     font-size: 1.25rem;
     font-weight: bold;
-        font-family: monospace;
+        font-family:'Helvetica';
 }
 
 .navbar-user {
