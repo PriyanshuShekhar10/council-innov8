@@ -21,7 +21,8 @@ const App = () => {
             <Route path="/" element={<Dashboard />} />
             <Route path="/movies" element={<Movies />} />
             <Route path="/reservations" element={<Reservations />} />
-            <Route path="/users" element={<Users />} />
+            {/* <Route path="/users" element={<Users />} /> */}
+            <Route path="/candidate" element={<Users />} />
           </Routes>
         </SidebarComponent>
         <Routes>

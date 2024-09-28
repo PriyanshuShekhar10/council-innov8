@@ -116,7 +116,7 @@ export default function Movies() {
 
   return (
     <>
-      <Navbar />
+     
       <div className={styles.container}>
         <h2>{isEditing ? "Edit Movie" : "Add New Movie"}</h2>
         <form onSubmit={handleSubmit} className={styles.form}>

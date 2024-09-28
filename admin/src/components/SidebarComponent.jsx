@@ -16,11 +16,13 @@ export default function SidebarComponent({ children }) {
 
   const menuItem = [
     { path: "/", name: "Dashboard", icon: <FaTh /> },
-    { path: "/advertisement", name: "Advertisement", icon: <FaThinkPeaks /> },
-    { path: "/cinema", name: "Cinema", icon: <FaTv /> },
-    { path: "/movies", name: "Movies", icon: <MdMovieEdit /> },
-    { path: "/reservations", name: "Reservations", icon: <FaBook /> },
-    { path: "/users", name: "Users", icon: <FaUsers /> },
+    { path: "/reservations", name: "Candidates", icon: <FaBook /> },
+    { path: "/movies", name: "Shortlisted", icon: <MdMovieEdit /> },
+    { path: "/advertisement", name: "Fraudelent", icon: <FaThinkPeaks /> },
+    { path: "/cinema", name: "Network Analysis", icon: <FaTv /> },
+    
+    
+    // { path: "/users", name: "Users", icon: <FaUsers /> },
   ];
 
   return (

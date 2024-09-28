@@ -1,7 +1,7 @@
 .navbar {
     height: 3rem;
-    background-color: hsl(215, 74%, 8%);
-    color: white;
+    background-color: white;
+    color: #001F3F;
     width: 100%;
     display: flex;
     align-items: center;

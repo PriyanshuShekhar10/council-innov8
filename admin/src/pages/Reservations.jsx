@@ -116,7 +116,7 @@ export default function Reservations() {
 
   return (
     <>
-      <Navbar />
+      
       <h1 style={{ color: "red", padding: "0 10rem" }}>Out of service</h1>
       <div className="container">
         <h2>{isEditing ? "Edit Booking" : "Create Booking"}</h2>

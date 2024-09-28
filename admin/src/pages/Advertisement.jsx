@@ -87,7 +87,6 @@ export default function Advertisement() {
 
   return (
     <>
-      <Navbar />
       <div className={styles.container}>
         <h2>{isEditing ? "Edit Advertisement" : "Add New Advertisement"}</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
