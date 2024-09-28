@@ -106,13 +106,13 @@
 .rightPanel {
     flex-basis: 75%;
     padding: 20px;
-    background-color: #c0ffde;
+    background-color: #222A3F;
     border-radius: 0 8px 8px 0;
     transition: background-color 0.3s ease;
 }
 
 .rightPanel:hover {
-    background-color: #f0f4f8;
+    background-color: #222A3F;
 }
 
 .sectionTitle {

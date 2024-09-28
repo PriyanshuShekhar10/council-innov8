@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import "./Dashboard.css"; // Import CSS for styling
-import Iframe from "../components/Iframe";
 import { Pie } from "react-chartjs-2";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
 import CandidatesTable from "../components/CandidatesTable"; // Import the table component
@@ -111,7 +110,6 @@ export default function Dashboard({ adminName = "Admin" }) {
         </div>
         {/* Candidates Table Section */}
         <CandidatesTable />
-        <Iframe />
       </div>
     </>
   );

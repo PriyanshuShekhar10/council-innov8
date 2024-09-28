@@ -46,7 +46,7 @@ const CandidateDetails = () => {
       <div className={styles.leftPanel}>
         <div>
           <img
-            src="https://via.placeholder.com/150"
+            src="https://t4.ftcdn.net/jpg/01/24/65/69/360_F_124656969_x3y8YVzvrqFZyv3YLWNo6PJaC88SYxqM.jpg"
             alt="Avatar"
             className={styles.avatar}
           />
@@ -87,20 +87,30 @@ const CandidateDetails = () => {
                 key={index}
                 className="vertical-timeline-element--work"
                 contentStyle={{
-                  background: "rgb(33, 150, 243)",
+                  background: "white",
                   color: "#fff",
                 }}
                 contentArrowStyle={{
                   borderRight: "7px solid  black",
                 }}
                 date={
-                  <span style={{ color: "black" }}>{experience.duration}</span>
+                  <span
+                    style={{
+                      color: "#FA4B00",
+                      "font-size": "150%",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {experience.duration}
+                  </span>
                 }
                 iconStyle={{ background: "rgb(33, 150, 243)", color: "#fff" }}
                 icon={<WorkIcon />}
               >
                 <h3 className="vertical-timeline-element-title">
-                  <span>{experience.job_title}</span>
+                  <span style={{ color: "#FA4B00", fontSize: "150%" }}>
+                    {experience.job_title}
+                  </span>
                 </h3>
                 <h4 className="vertical-timeline-element-subtitle">
                   {experience.location}
