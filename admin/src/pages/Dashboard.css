@@ -7,16 +7,22 @@
 
 .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
+    /* Three equal-width columns */
     gap: 20px;
     width: 100%;
-    max-width: 960px;
+    max-width: 800px;
+    /* Adjusted width to better fit 3 tiles */
+    margin: 0 auto;
+    /* Center the grid within its container */
+    justify-content: center;
+    align-items: center;
 }
-.link-description{
+
+.link-description {
     color: white;
     font-family: monospace;
 }
-
 
 .dashboard-tile {
     padding: 20px;
@@ -48,7 +54,10 @@
 
 @media (max-width: 768px) {
     .dashboard-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        grid-template-columns: repeat(1, 1fr);
+        /* Stack tiles vertically on smaller screens */
+        max-width: 100%;
+        /* Ensure it takes full width on small screens */
     }
 
     .dashboard-tile {

@@ -1,47 +1,27 @@
-/* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import "./Dashboard.css"; // Import CSS for styling
 import Iframe from "../components/Iframe";
-
 export default function Dashboard({ adminName = "Admin" }) {
-  // Assuming the admin's name is passed as a prop
+  // Define the new links for the three tiles
   const links = [
     {
-      path: "/",
-      name: "Dashboard",
-      description: "View your control panel.",
-      bgColor: "#4CAF50",
-    },
-    {
-      path: "/advertisement",
-      name: "Advertisement",
-      description: "Manage advertisements.",
-      bgColor: "#2196F3",
-    },
-    {
-      path: "/cinema",
-      name: "Cinema",
-      description: "Cinema configurations and settings.",
-      bgColor: "#f44336",
+      path: "/reservations",
+      name: "Candidates",
+      description: "View and manage all candidates.",
+      bgColor: "#4CAF50", // Green
     },
     {
       path: "/movies",
-      name: "Movies",
-      description: "Edit and update movie listings.",
-      bgColor: "#FF9800",
+      name: "Shortlisted",
+      description: "View shortlisted candidates.",
+      bgColor: "#2196F3", // Blue
     },
     {
-      path: "/reservations",
-      name: "Reservations",
-      description: "View and manage all reservations.",
-      bgColor: "#9C27B0",
-    },
-    {
-      path: "/users",
-      name: "Users",
-      description: "Manage user accounts and permissions.",
-      bgColor: "#3F51B5",
+      path: "/advertisement",
+      name: "Fraudulent",
+      description: "Manage and review fraudulent activities.",
+      bgColor: "#f44336", // Red
     },
   ];
 
