@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import "./Dashboard.css"; // Import CSS for styling
+import Iframe from "../components/Iframe";
 
 export default function Dashboard({ adminName = "Admin" }) {
   // Assuming the admin's name is passed as a prop
@@ -65,6 +66,7 @@ export default function Dashboard({ adminName = "Admin" }) {
             </Link>
           ))}
         </div>
+        <Iframe />
       </div>
     </>
   );
