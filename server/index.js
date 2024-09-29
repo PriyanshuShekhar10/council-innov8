@@ -8,7 +8,7 @@ app.use(express.json());
 // Enable CORS for your frontend URL
 app.use(
   cors({
-    origin: "http://localhost:5174", // Ensure this matches your frontend's URL
+    origin: "http://localhost:5173", // Ensure this matches your frontend's URL
     credentials: true,
   })
 );
