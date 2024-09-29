@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import skills from "../data/unique_skills.json"; // Import the skills from the JSON file
+import fraudData from "../Data/Resume.fraudanalyses.json"; // Import the fraud analysis JSON data
 
 const CandidatesTable = () => {
   const [candidates, setCandidates] = useState([]);
@@ -27,13 +28,21 @@ const CandidatesTable = () => {
         const shortlistedIds = new Set(shortlistedResponse.data.map(item => item.candidateId));
         const fraudulentIds = new Set(fraudulentResponse.data.map(item => item.candidateId));
 
+        // Filter and map candidates with fraud data
         const filteredCandidates = candidatesResponse.data
           .filter(candidate => 
             !shortlistedIds.has(candidate.id) && 
             !fraudulentIds.has(candidate.id) &&
             candidate.work_experience[0]?.job_title && 
-            candidate.work_experience[0]?.job_title.toLowerCase() !== "n/a" 
-          );
+            candidate.work_experience[0]?.job_title.toLowerCase() !== "n/a"
+          )
+          .map(candidate => {
+            const fraudRecord = fraudData.find(item => item.id === candidate.id);
+            return {
+              ...candidate,
+              fraudIndex: fraudRecord ? fraudRecord.final_scores : "N/A", // Assign fraudIndex from JSON or N/A
+            };
+          });
 
         const uniqueCandidates = Array.from(new Set(filteredCandidates.map(c => c.id)))
           .map(id => filteredCandidates.find(c => c.id === id))
@@ -75,8 +84,6 @@ const CandidatesTable = () => {
       console.error(`Error during ${action}:`, error);
     }
   };
-
-  const generateFraudIndex = () => (Math.random() * 100).toFixed(2);
 
   const indexOfLastCandidate = currentPage * candidatesPerPage;
   const indexOfFirstCandidate = indexOfLastCandidate - candidatesPerPage;
@@ -256,8 +263,7 @@ const CandidatesTable = () => {
         </thead>
         <tbody>
           {currentCandidates.map((candidate) => {
-            const fraudIndex = generateFraudIndex();
-            const isHighFraud = fraudIndex > 60;
+            const isHighFraud = candidate.fraudIndex > 0.6;
 
             return (
               <tr
@@ -277,7 +283,7 @@ const CandidatesTable = () => {
                 <td>{candidate.id}</td>
                 <td>Dummy Name</td>
                 <td>{candidate.work_experience[0]?.job_title || "N/A"}</td>
-                <td>{fraudIndex}</td>
+                <td>{candidate.fraudIndex}</td>
               </tr>
             );
           })}
