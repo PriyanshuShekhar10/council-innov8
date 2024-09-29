@@ -7,6 +7,8 @@ import Users from "./pages/Users";
 import Movies from "./pages/Movies";
 import SidebarComponent from "./components/SidebarComponent";
 import Login from "./pages/Login/Login";
+import ShortlistedCandidatesTable from "./components/ShortlistedCandidatesTable";
+import FraudulentCandidatesTable from "./components/FraudulentCandidatesTable";
 import "./App.css";
 import CandidatesTable from "./components/CandidatesTable";
 
@@ -22,11 +24,11 @@ const App = () => {
           element={
             <SidebarComponent>
               <Routes>
-                <Route path="/advertisement" element={<Advertisement />} />
+                <Route path="/advertisement" element={<FraudulentCandidatesTable />} />
                 <Route path="/cinema" element={<Cinema />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/" element={<Dashboard />} />
-                <Route path="/movies" element={<Movies />} />
+                <Route path="/movies" element={<ShortlistedCandidatesTable />} />
                 <Route path="/reservations" element={<CandidatesTable />} />
                 <Route path="/candidates/:id" element={<Users />} />
               </Routes>

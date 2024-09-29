@@ -312,6 +312,6 @@
   
   .pagination button:first-of-type,
   .pagination button:last-of-type {
-    margin: 0 10px; /* Increase distance between index buttons and first/last buttons */
+    margin: 0 100px; /* Increase distance between index buttons and first/last buttons */
   }
   

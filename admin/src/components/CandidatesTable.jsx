@@ -15,8 +15,32 @@ const CandidatesTable = () => {
     // Fetch candidates from the API
     const fetchCandidates = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/candidates");
-        setCandidates(response.data);
+        // Fetch all candidates
+        const candidatesResponse = await axios.get("http://localhost:3000/api/candidates");
+
+        // Fetch all shortlisted candidates
+        const shortlistedResponse = await axios.get("http://localhost:3000/api/shortlist");
+        const shortlistedIds = new Set(shortlistedResponse.data.map(item => item.candidateId));
+
+        // Fetch all fraudulent candidates
+        const fraudulentResponse = await axios.get("http://localhost:3000/api/flag");
+        const fraudulentIds = new Set(fraudulentResponse.data.map(item => item.candidateId));
+
+        // Filter out candidates who are shortlisted or marked as fraudulent
+        const filteredCandidates = candidatesResponse.data
+          .filter(candidate => 
+            !shortlistedIds.has(candidate.id) && 
+            !fraudulentIds.has(candidate.id) &&
+            candidate.work_experience[0]?.job_title && // Exclude candidates with no job title
+            candidate.work_experience[0]?.job_title.toLowerCase() !== "n/a" // Exclude "N/A" job titles
+          );
+
+        // Remove duplicates by ID and sort by ID
+        const uniqueCandidates = Array.from(new Set(filteredCandidates.map(c => c.id)))
+          .map(id => filteredCandidates.find(c => c.id === id))
+          .sort((a, b) => a.id - b.id);
+
+        setCandidates(uniqueCandidates);
       } catch (error) {
         console.error("Error fetching candidates:", error);
       }
@@ -37,15 +61,22 @@ const CandidatesTable = () => {
   };
 
   // Handle bulk action
-  const handleBulkAction = (action) => {
-    setCandidates((prevCandidates) =>
-      prevCandidates.map((candidate) =>
-        selectedCandidates.includes(candidate.id)
-          ? { ...candidate, status: action }
-          : candidate
-      )
-    );
-    setSelectedCandidates([]); // Clear selections after action
+  const handleBulkAction = async (action) => {
+    const url = action === "Shortlisted" ? "/api/shortlist" : "/api/flag";
+    try {
+      for (const candidateId of selectedCandidates) {
+        await axios.post(`http://localhost:3000${url}`, {
+          candidateId,
+        });
+      }
+      // Remove marked candidates from the current list
+      setCandidates((prevCandidates) =>
+        prevCandidates.filter((candidate) => !selectedCandidates.includes(candidate.id))
+      );
+      setSelectedCandidates([]); // Clear selections after action
+    } catch (error) {
+      console.error(`Error during ${action}:`, error);
+    }
   };
 
   // Function to generate a random fraud index
@@ -205,13 +236,11 @@ const CandidatesTable = () => {
             <th>Id No</th>
             <th>Name</th>
             <th>Latest Job Title</th>
-            <th>Status</th>
             <th>Fraud Index</th>
           </tr>
         </thead>
         <tbody>
           {currentCandidates.map((candidate) => {
-            const status = candidate.status || "Pending"; // Default status is "Pending"
             const fraudIndex = generateFraudIndex();
             const isHighFraud = fraudIndex > 60;
 
@@ -233,7 +262,6 @@ const CandidatesTable = () => {
                 <td>{candidate.id}</td>
                 <td>Dummy Name</td> {/* Since the name isn't provided in the JSON */}
                 <td>{candidate.work_experience[0]?.job_title || "N/A"}</td>
-                <td>{status}</td>
                 <td>{fraudIndex}</td>
               </tr>
             );

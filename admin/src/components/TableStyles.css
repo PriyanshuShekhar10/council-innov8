@@ -1,0 +1,61 @@
+.table-container {
+    width: 100%;
+    margin: 20px auto;
+}
+
+.candidates-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.candidates-table th,
+.candidates-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.candidates-table th {
+    background-color: #4CAF50; /* Green */
+    color: white; /* Ensures text is readable on the green background */
+}
+
+.action-button {
+    padding: 8px 12px;
+    margin-right: 10px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.action-button.move-back {
+    background-color: #4CAF50; /* Green */
+}
+
+.action-button.remove {
+    background-color: #f44336; /* Red */
+}
+
+.action-button.move-back:hover {
+    background-color: #45a049;
+}
+
+.action-button.remove:hover {
+    background-color: #e53935;
+}
+
+.action-button + .action-button {
+    margin-left: 10px;
+}
+.action-button.interview {
+    background-color: #007bff; /* Blue */
+  }
+  
+  .action-button.interview:hover {
+    background-color: #0056b3;
+  }
+  

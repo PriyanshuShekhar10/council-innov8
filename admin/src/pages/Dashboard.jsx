@@ -1,38 +1,86 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import "./Dashboard.css"; // Import CSS for styling
 import { Pie } from "react-chartjs-2";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
 import CandidatesTable from "../components/CandidatesTable"; // Import the table component
+import axios from "axios";
 
 // Register the required components for Chart.js
 Chart.register(ArcElement, Tooltip, Legend);
 
 export default function Dashboard({ adminName = "Admin" }) {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [shortlistedCount, setShortlistedCount] = useState(0);
+  const [fraudCount, setFraudCount] = useState(0);
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        // Fetch shortlisted candidates
+        const shortlistedResponse = await axios.get("http://localhost:3000/api/shortlist");
+        const shortlistedIds = [...new Set(shortlistedResponse.data.map(item => item.candidateId))];
+        const shortlistedCandidates = await Promise.all(
+          shortlistedIds.map(id => axios.get(`http://localhost:3000/api/candidates/${id}`))
+        );
+        const validShortlistedCount = shortlistedCandidates.filter(
+          candidate =>
+            candidate.data.work_experience[0]?.job_title &&
+            candidate.data.work_experience[0]?.job_title.toLowerCase() !== "n/a"
+        ).length;
+        setShortlistedCount(validShortlistedCount);
+
+        // Fetch fraudulent candidates
+        const fraudResponse = await axios.get("http://localhost:3000/api/flag");
+        const fraudIds = [...new Set(fraudResponse.data.map(item => item.candidateId))];
+        const fraudCandidates = await Promise.all(
+          fraudIds.map(id => axios.get(`http://localhost:3000/api/candidates/${id}`))
+        );
+        const validFraudCount = fraudCandidates.filter(
+          candidate =>
+            candidate.data.work_experience[0]?.job_title &&
+            candidate.data.work_experience[0]?.job_title.toLowerCase() !== "n/a"
+        ).length;
+        setFraudCount(validFraudCount);
+      } catch (error) {
+        console.error("Error fetching counts:", error);
+      }
+    };
+
+    fetchCounts();
+
+    // Set up an interval to fetch counts every 10 seconds
+    const intervalId = setInterval(fetchCounts, 10);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(intervalId);
+  }, []);
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
   };
 
+  const totalCandidates = 1000;
+  const candidatesCount = totalCandidates - shortlistedCount - fraudCount;
+
   // Define the new links for the three tiles
   const links = [
     {
       path: "/reservations",
-      name: "Candidates",
+      name: `Candidates: ${candidatesCount}`,
       description: "View and manage all candidates.",
       bgColor: "#4CAF50", // Green
     },
     {
       path: "/movies",
-      name: "Shortlisted",
+      name: `Shortlisted: ${shortlistedCount}`,
       description: "View shortlisted candidates.",
       bgColor: "#2196F3", // Blue
     },
     {
       path: "/advertisement",
-      name: "Fraudulent",
+      name: `Fraudulent: ${fraudCount}`,
       description: "Manage and review fraudulent activities.",
       bgColor: "#f44336", // Red
     },
