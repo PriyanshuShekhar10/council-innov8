@@ -1,20 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import {
   VerticalTimeline,
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
-import WorkIcon from "@mui/icons-material/Work"; // Adjust this import based on your icons
-import SchoolIcon from "@mui/icons-material/School"; // Adjust this import based on your icons
-import StarIcon from "@mui/icons-material/Star"; // Adjust this import based on your icons
-import styles from "./CandidateDetails.module.css"; // Assuming you still have your CSS module
+import WorkIcon from "@mui/icons-material/Work";
+import SchoolIcon from "@mui/icons-material/School";
+import StarIcon from "@mui/icons-material/Star";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import styles from "./CandidateDetails.module.css";
 
 const CandidateDetails = () => {
   const { id } = useParams(); // Extract the id from the URL
   const [candidate, setCandidate] = useState(null);
+  const [fraudAnalysis, setFraudAnalysis] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showAnalysis, setShowAnalysis] = useState(false); // State to handle hover effect
+  const analysisRef = useRef(null); // Reference to the analysis container
 
   useEffect(() => {
     const fetchCandidate = async () => {
@@ -34,11 +39,39 @@ const CandidateDetails = () => {
       }
     };
 
+    const fetchFraudAnalysis = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/fraud-analysis/${id}`
+        );
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        }
+        const data = await response.json();
+        setFraudAnalysis(data);
+        console.log("Fraud Analysis Data:", data); // Print to console
+      } catch (error) {
+        console.error("Failed to fetch fraud analysis data:", error.message);
+      }
+    };
+
+    fetchFraudAnalysis();
     fetchCandidate();
   }, [id]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
+
+  const fraudScore = fraudAnalysis?.Final_Fraud_Score || 0;
+  const influenceScore = fraudAnalysis?.Final_Influence_Score || 0;
+  const overallScore = fraudAnalysis?.final_scores || 0;
+
+  // Determine color based on score
+  const getColor = (score) => {
+    if (score > 75) return "#FF4C4C"; // Red for high risk
+    if (score > 50) return "#FFA500"; // Orange for medium risk
+    return "#4CAF50"; // Green for low risk
+  };
 
   return (
     <div className={styles.container}>
@@ -57,10 +90,10 @@ const CandidateDetails = () => {
             <strong>ID:</strong> {id}
           </p>
           <p>
-            <strong>Name:</strong> John Doe
+            <strong>Name:</strong> {candidate?.name || "Unknown"}
           </p>
           <p>
-            <strong>Job Title:</strong> Software Engineer
+            <strong>Job Title:</strong> {candidate?.job_title || "Unknown"}
           </p>
         </div>
         <div className={styles.skills}>
@@ -79,6 +112,80 @@ const CandidateDetails = () => {
 
       {/* Right side - 75% */}
       <div className={styles.rightPanel}>
+        {/* Fraud Analysis Section at the top */}
+        <h2 className={styles.sectionTitle}>Analysis Overview</h2>
+        <div className={styles.graphContainer}>
+          <div
+            className={styles.graph}
+            onMouseEnter={() => setShowAnalysis(true)}
+            onMouseLeave={() => setShowAnalysis(false)}
+          >
+            <CircularProgressbar
+              value={fraudScore * 100} // Assuming the score is in decimal format
+              maxValue={100}
+              text={`${(fraudScore * 100).toFixed(1)}%`}
+              styles={buildStyles({
+                textColor: getColor(fraudScore * 100),
+                pathColor: getColor(fraudScore * 100),
+                trailColor: "#f0f0f0",
+                textSize: "16px",
+                pathTransitionDuration: 0.5,
+                trailColor: "#d6d6d6",
+                backgroundColor: "#f8f9fa",
+              })}
+            />
+            <p className={styles.graphLabel}>Fraud Score</p>{" "}
+            {/* Title for Fraud Score */}
+            {showAnalysis && (
+              <div ref={analysisRef} className={styles.analysisTooltip}>
+                <p>
+                  <strong>Final Fraud Score:</strong>{" "}
+                  {fraudAnalysis.Final_Fraud_Score}
+                </p>
+                <p>
+                  <strong>Fraud Analysis:</strong> {fraudAnalysis.FraudAnalysis}
+                </p>
+              </div>
+            )}
+          </div>
+
+          <div className={styles.graph}>
+            <CircularProgressbar
+              value={influenceScore * 100}
+              maxValue={100}
+              text={`${(influenceScore * 100).toFixed(1)}%`}
+              styles={buildStyles({
+                textColor: getColor(influenceScore * 100),
+                pathColor: getColor(influenceScore * 100),
+                trailColor: "#f0f0f0",
+                textSize: "16px",
+                pathTransitionDuration: 0.5,
+                trailColor: "#d6d6d6",
+                backgroundColor: "#f8f9fa",
+              })}
+            />
+            <p className={styles.graphLabel}>Influence Score</p>
+          </div>
+
+          <div className={styles.graph}>
+            <CircularProgressbar
+              value={overallScore * 100}
+              maxValue={100}
+              text={`${(overallScore * 100).toFixed(1)}%`}
+              styles={buildStyles({
+                textColor: getColor(overallScore * 100),
+                pathColor: getColor(overallScore * 100),
+                trailColor: "#f0f0f0",
+                textSize: "16px",
+                pathTransitionDuration: 0.5,
+                trailColor: "#d6d6d6",
+                backgroundColor: "#f8f9fa",
+              })}
+            />
+            <p className={styles.graphLabel}>Overall Score</p>
+          </div>
+        </div>
+
         <h2 className={styles.sectionTitle}>Work Experience</h2>
         {candidate?.work_experience && candidate.work_experience.length > 0 ? (
           <VerticalTimeline>
@@ -91,13 +198,13 @@ const CandidateDetails = () => {
                   color: "#fff",
                 }}
                 contentArrowStyle={{
-                  borderRight: "7px solid  black",
+                  borderRight: "7px solid black",
                 }}
                 date={
                   <span
                     style={{
                       color: "#FA4B00",
-                      "font-size": "150%",
+                      fontSize: "150%",
                       fontWeight: "bold",
                     }}
                   >
@@ -138,9 +245,12 @@ const CandidateDetails = () => {
               <VerticalTimelineElement
                 key={index}
                 className="vertical-timeline-element--education"
-                contentStyle={{ background: "rgb(233, 30, 99)", color: "#fff" }}
+                contentStyle={{
+                  background: "rgb(233, 30, 99)",
+                  color: "#fff",
+                }}
                 contentArrowStyle={{
-                  borderRight: "7px solid  rgb(233, 30, 99)",
+                  borderRight: "7px solid rgb(233, 30, 99)",
                 }}
                 date={education.graduation_year}
                 iconStyle={{ background: "rgb(233, 30, 99)", color: "#fff" }}

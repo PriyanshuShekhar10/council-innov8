@@ -54,6 +54,20 @@ const FlaggedCandidate = mongoose.model(
   flaggedCandidateSchema
 );
 
+// Define a new schema for Fraud Analysis and Influence Scores
+const fraudAnalysisSchema = new mongoose.Schema({
+  id: { type: Number, required: true, unique: true },
+  Final_Fraud_Score: Number,
+  Final_Influence_Score: Number,
+  FraudAnalysis: String,
+  FraudDetected: Boolean,
+  FraudScore: Number,
+  final_scores: Number,
+});
+
+// Create a model from the schema
+const FraudAnalysis = mongoose.model("FraudAnalysis", fraudAnalysisSchema);
+
 // Candidate CRUD Operations
 
 // Create a Candidate
@@ -184,6 +198,46 @@ app.delete("/api/flag/:id", async (req, res) => {
   });
   if (!result) return res.status(404).send("Flagged candidate not found");
   res.send(result);
+});
+
+// Fraud Analysis CRUD Operations
+
+// Create a Fraud Analysis entry
+app.post("/api/fraud-analysis", async (req, res) => {
+  const fraudAnalysis = new FraudAnalysis(req.body);
+  try {
+    await fraudAnalysis.save();
+    res.send(fraudAnalysis);
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
+});
+
+// Get Fraud Analysis by ID
+app.get("/api/fraud-analysis/:id", async (req, res) => {
+  const fraudAnalysis = await FraudAnalysis.findOne({ id: req.params.id });
+  if (!fraudAnalysis) return res.status(404).send("Fraud analysis not found");
+  res.send(fraudAnalysis);
+});
+
+// Update Fraud Analysis by ID
+app.put("/api/fraud-analysis/:id", async (req, res) => {
+  const fraudAnalysis = await FraudAnalysis.findOneAndUpdate(
+    { id: req.params.id },
+    req.body,
+    { new: true }
+  );
+  if (!fraudAnalysis) return res.status(404).send("Fraud analysis not found");
+  res.send(fraudAnalysis);
+});
+
+// Delete Fraud Analysis by ID
+app.delete("/api/fraud-analysis/:id", async (req, res) => {
+  const fraudAnalysis = await FraudAnalysis.findOneAndDelete({
+    id: req.params.id,
+  });
+  if (!fraudAnalysis) return res.status(404).send("Fraud analysis not found");
+  res.send(fraudAnalysis);
 });
 
 // Start the server
