@@ -7,7 +7,7 @@ import pandas as pd
 import matplotlib.colors as mcolors
 
 # Load and prepare the dataset
-df = pd.read_csv(r'/Users/krtinkhemka/Desktop/frontend/council-innov8/admin/final-dict-sorted-k2.csv')
+df = pd.read_csv(r'D:\Hackathons\council-innov8\admin\final-dict-sorted-k2.csv')
 
 # Create the graph
 G = nx.DiGraph()

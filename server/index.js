@@ -8,7 +8,7 @@ app.use(express.json());
 // Enable CORS for your frontend URL
 app.use(
   cors({
-    origin: "http://localhost:5173", // Ensure this matches your frontend's URL
+    origin: "*", // Ensure this matches your frontend's URL
     credentials: true,
   })
 );
@@ -16,11 +16,7 @@ app.use(
 // Connect to MongoDB
 mongoose
   .connect(
-    "mongodb+srv://priyanshu:priyanshu@cluster0.qf85m.mongodb.net/Resume",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
+    "mongodb+srv://priyanshu:priyanshu@cluster0.qf85m.mongodb.net/Resume"
   )
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Could not connect to MongoDB...", err));
@@ -88,6 +84,21 @@ app.get("/api/candidates/:id", async (req, res) => {
   const candidate = await Candidate.findOne({ id: req.params.id });
   if (!candidate) return res.status(404).send("Candidate not found");
   res.send(candidate);
+});
+
+// Fetch multiple candidates by IDs (batch request)
+app.post("/api/candidates/batch", async (req, res) => {
+  const { ids } = req.body; // Expecting an array of candidate IDs
+  if (!Array.isArray(ids)) {
+    return res.status(400).send("Invalid data format. 'ids' must be an array.");
+  }
+
+  try {
+    const candidates = await Candidate.find({ id: { $in: ids } });
+    res.send(candidates);
+  } catch (err) {
+    res.status(500).send("Server error: " + err.message);
+  }
 });
 
 // Update Candidate by ID

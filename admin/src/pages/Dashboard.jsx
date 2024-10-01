@@ -19,28 +19,42 @@ export default function Dashboard({ adminName = "Admin" }) {
     const fetchCounts = async () => {
       try {
         // Fetch shortlisted candidates
-        const shortlistedResponse = await axios.get("http://localhost:3000/api/shortlist");
-        const shortlistedIds = [...new Set(shortlistedResponse.data.map(item => item.candidateId))];
-        const shortlistedCandidates = await Promise.all(
-          shortlistedIds.map(id => axios.get(`http://localhost:3000/api/candidates/${id}`))
+        const shortlistedResponse = await axios.get(
+          "http://localhost:3000/api/shortlist"
         );
-        const validShortlistedCount = shortlistedCandidates.filter(
-          candidate =>
-            candidate.data.work_experience[0]?.job_title &&
-            candidate.data.work_experience[0]?.job_title.toLowerCase() !== "n/a"
+        const shortlistedIds = [
+          ...new Set(shortlistedResponse.data.map((item) => item.candidateId)),
+        ];
+
+        // Batch fetch shortlisted candidates
+        const shortlistedCandidates = await axios.post(
+          "http://localhost:3000/api/candidates/batch",
+          { ids: shortlistedIds }
+        );
+
+        const validShortlistedCount = shortlistedCandidates.data.filter(
+          (candidate) =>
+            candidate.work_experience[0]?.job_title &&
+            candidate.work_experience[0]?.job_title.toLowerCase() !== "n/a"
         ).length;
         setShortlistedCount(validShortlistedCount);
 
         // Fetch fraudulent candidates
         const fraudResponse = await axios.get("http://localhost:3000/api/flag");
-        const fraudIds = [...new Set(fraudResponse.data.map(item => item.candidateId))];
-        const fraudCandidates = await Promise.all(
-          fraudIds.map(id => axios.get(`http://localhost:3000/api/candidates/${id}`))
+        const fraudIds = [
+          ...new Set(fraudResponse.data.map((item) => item.candidateId)),
+        ];
+
+        // Batch fetch flagged candidates
+        const fraudCandidates = await axios.post(
+          "http://localhost:3000/api/candidates/batch",
+          { ids: fraudIds }
         );
-        const validFraudCount = fraudCandidates.filter(
-          candidate =>
-            candidate.data.work_experience[0]?.job_title &&
-            candidate.data.work_experience[0]?.job_title.toLowerCase() !== "n/a"
+
+        const validFraudCount = fraudCandidates.data.filter(
+          (candidate) =>
+            candidate.work_experience[0]?.job_title &&
+            candidate.work_experience[0]?.job_title.toLowerCase() !== "n/a"
         ).length;
         setFraudCount(validFraudCount);
       } catch (error) {
@@ -51,7 +65,7 @@ export default function Dashboard({ adminName = "Admin" }) {
     fetchCounts();
 
     // Set up an interval to fetch counts every 10 seconds
-    const intervalId = setInterval(fetchCounts, 10);
+    const intervalId = setInterval(fetchCounts, 10000); // 10 seconds interval
 
     // Cleanup interval on component unmount
     return () => clearInterval(intervalId);
@@ -101,7 +115,7 @@ export default function Dashboard({ adminName = "Admin" }) {
     labels: ["Genuine", "Fraudulent"],
     datasets: [
       {
-        data: [90, 10],
+        data: [823, 177],
         backgroundColor: ["#4BC0C0", "#FF6384"],
       },
     ],
